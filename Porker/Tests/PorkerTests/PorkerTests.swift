@@ -79,6 +79,19 @@ final class PorkerTests: XCTestCase {
         XCTAssertFalse(hand.isHighCard)
     }
 
+    func testIsStraight() {
+        var hand: Hand
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("K♠︎")])
+        XCTAssertTrue(hand.isStraight)
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("2♠︎")])
+        XCTAssertTrue(hand.isStraight)
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("3♠︎")])
+        XCTAssertFalse(hand.isStraight)
+    }
+
     func fromString(_ str: String) -> Card {
         let rank = String(str.prefix(str.count - 1))
         let suit = String(str.suffix(1))

@@ -21,4 +21,9 @@ struct Hand {
     var isHighCard: Bool {
         return !(isPair || isFlush)
     }
+
+    var isStraight: Bool {
+        let difference = abs(cards[0].rank.priority - cards[1].rank.priority)
+        return difference == 1 || difference == 12
+    }
 }

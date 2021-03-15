@@ -22,6 +22,24 @@ struct Card: Equatable {
         case jack  = "J"
         case queen = "Q"
         case king  = "K"
+
+        var priority: Int {
+            switch self {
+            case .ace:   return 1
+            case .king:  return 2
+            case .queen: return 3
+            case .jack:  return 4
+            case .ten:   return 5
+            case .nine:  return 6
+            case .eight: return 7
+            case .seven: return 8
+            case .six:   return 9
+            case .five:  return 10
+            case .four:  return 11
+            case .three: return 12
+            case .two:   return 13
+            }
+        }
     }
 
     enum Suit: String {
