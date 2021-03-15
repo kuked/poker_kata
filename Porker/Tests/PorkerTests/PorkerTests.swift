@@ -16,12 +16,12 @@ final class PorkerTests: XCTestCase {
         var card1: Card
         var card2: Card
 
-        card1 = Card(rank: .ace, suit: .heart)
-        card2 = Card(rank: .two, suit: .heart)
+        card1 = fromString("A❤︎")
+        card2 = fromString("2❤︎")
         XCTAssertTrue(card1.hasSameSuit(card2))
 
-        card1 = Card(rank: .ace, suit: .spade)
-        card2 = Card(rank: .two, suit: .heart)
+        card1 = fromString("A♠︎")
+        card2 = fromString("2❤︎")
         XCTAssertFalse(card1.hasSameSuit(card2))
     }
 
@@ -29,73 +29,59 @@ final class PorkerTests: XCTestCase {
         var card1: Card
         var card2: Card
 
-        card1 = Card(rank: .ace, suit: .spade)
-        card2 = Card(rank: .ace, suit: .heart)
+        card1 = fromString("A♠︎")
+        card2 = fromString("A❤︎")
         XCTAssertTrue(card1.hasSameRank(card2))
 
-        card1 = Card(rank: .ace, suit: .spade)
-        card2 = Card(rank: .two, suit: .heart)
+        card1 = fromString("A♠︎")
+        card2 = fromString("2❤︎")
         XCTAssertFalse(card1.hasSameRank(card2))
     }
 
     func testCardEqual() {
-        XCTAssertEqual(Card(rank: .ace, suit: .spade), Card(rank: .ace, suit: .spade))
+        XCTAssertEqual(fromString("A♠︎"), fromString("A♠︎"))
 
-        XCTAssertNotEqual(Card(rank: .ace, suit: .spade), Card(rank: .two, suit: .spade))
-        XCTAssertNotEqual(Card(rank: .ace, suit: .spade), Card(rank: .ace, suit: .heart))
-        XCTAssertNotEqual(Card(rank: .ace, suit: .spade), Card(rank: .queen, suit: .heart))
+        XCTAssertNotEqual(fromString("A♠︎"), fromString("2♠︎"))
+        XCTAssertNotEqual(fromString("A♠︎"), fromString("A❤︎"))
+        XCTAssertNotEqual(fromString("A♠︎"), fromString("Q❤︎"))
     }
     
     func testIsPair() {
-        var card1: Card
-        var card2: Card
         var hand: Hand
 
-        card1 = Card(rank: .ace, suit: .heart)
-        card2 = Card(rank: .ace, suit: .spade)
-        hand = Hand(cards: [card1, card2])
+        hand = Hand(cards: [fromString("A❤︎"), fromString("A♠︎")])
         XCTAssertTrue(hand.isPair)
         
-        card1 = Card(rank: .jack, suit: .heart)
-        card2 = Card(rank: .king, suit: .spade)
-        hand = Hand(cards: [card1, card2])
+        hand = Hand(cards: [fromString("J❤︎"), fromString("K♠︎")])
         XCTAssertFalse(hand.isPair)
     }
     
     func testIsFlush() {
-        var card1: Card
-        var card2: Card
         var hand: Hand
 
-        card1 = Card(rank: .jack, suit: .heart)
-        card2 = Card(rank: .king, suit: .heart)
-        hand = Hand(cards: [card1, card2])
+        hand = Hand(cards: [fromString("J❤︎"), fromString("K❤︎")])
         XCTAssertTrue(hand.isFlush)
         
-        card1 = Card(rank: .jack, suit: .heart)
-        card2 = Card(rank: .king, suit: .spade)
-        hand = Hand(cards: [card1, card2])
+        hand = Hand(cards: [fromString("J❤︎"), fromString("K♠︎")])
         XCTAssertFalse(hand.isFlush)
     }
     
     func testIsHighCard() {
-        var card1: Card
-        var card2: Card
         var hand: Hand
-        
-        card1 = Card(rank: .jack, suit: .heart)
-        card2 = Card(rank: .king, suit: .spade)
-        hand = Hand(cards: [card1, card2])
+
+        hand = Hand(cards: [fromString("J❤︎"), fromString("K♠︎")])
         XCTAssertTrue(hand.isHighCard)
 
-        card1 = Card(rank: .ace, suit: .heart)
-        card2 = Card(rank: .ace, suit: .spade)
-        hand = Hand(cards: [card1, card2])
+        hand = Hand(cards: [fromString("A❤︎"), fromString("A♠︎")])
         XCTAssertFalse(hand.isHighCard)
         
-        card1 = Card(rank: .jack, suit: .heart)
-        card2 = Card(rank: .king, suit: .heart)
-        hand = Hand(cards: [card1, card2])
+        hand = Hand(cards: [fromString("J❤︎"), fromString("K❤︎")])
         XCTAssertFalse(hand.isHighCard)
+    }
+
+    func fromString(_ str: String) -> Card {
+        let rank = String(str.prefix(str.count - 1))
+        let suit = String(str.suffix(1))
+        return Card(rank: Card.Rank.init(rawValue: rank)!, suit: Card.Suit.init(rawValue: suit)!)
     }
 }
