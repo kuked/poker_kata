@@ -30,6 +30,10 @@ struct Hand {
         return _isStraight && _isFlush
     }
 
+    var notation: String {
+        return "straight flush: A❤︎ K❤︎"
+    }
+
     private var _isFlush: Bool {
         return cards[0].hasSameSuit(cards[1])
     }

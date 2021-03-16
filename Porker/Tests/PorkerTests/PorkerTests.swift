@@ -105,6 +105,13 @@ final class PorkerTests: XCTestCase {
         XCTAssertTrue(hand.isStraightFlush)
     }
 
+    func testHandNotation() {
+        var hand: Hand
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("K❤︎")])
+        XCTAssertEqual(hand.notation, "straight flush: A❤︎ K❤︎")
+    }
+
     func fromString(_ str: String) -> Card {
         let rank = String(str.prefix(str.count - 1))
         let suit = String(str.suffix(1))
