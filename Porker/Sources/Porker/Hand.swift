@@ -15,7 +15,7 @@ struct Hand {
     }
     
     var isFlush: Bool {
-        return cards[0].hasSameSuit(cards[1])
+        return _isFlush && !_isStraight
     }
     
     var isHighCard: Bool {
@@ -23,6 +23,18 @@ struct Hand {
     }
 
     var isStraight: Bool {
+        return _isStraight && !_isFlush
+    }
+
+    var isStraightFlush: Bool {
+        return _isStraight && _isFlush
+    }
+
+    private var _isFlush: Bool {
+        return cards[0].hasSameSuit(cards[1])
+    }
+
+    private var _isStraight: Bool {
         let difference = abs(cards[0].rank.priority - cards[1].rank.priority)
         return difference == 1 || difference == 12
     }

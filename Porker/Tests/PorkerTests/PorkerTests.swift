@@ -64,6 +64,9 @@ final class PorkerTests: XCTestCase {
         
         hand = Hand(cards: [fromString("J❤︎"), fromString("K♠︎")])
         XCTAssertFalse(hand.isFlush)
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("K❤︎")])
+        XCTAssertFalse(hand.isFlush)
     }
     
     func testIsHighCard() {
@@ -74,7 +77,7 @@ final class PorkerTests: XCTestCase {
 
         hand = Hand(cards: [fromString("A❤︎"), fromString("A♠︎")])
         XCTAssertFalse(hand.isHighCard)
-        
+
         hand = Hand(cards: [fromString("J❤︎"), fromString("K❤︎")])
         XCTAssertFalse(hand.isHighCard)
     }
@@ -85,11 +88,21 @@ final class PorkerTests: XCTestCase {
         hand = Hand(cards: [fromString("A❤︎"), fromString("K♠︎")])
         XCTAssertTrue(hand.isStraight)
 
-        hand = Hand(cards: [fromString("A❤︎"), fromString("2♠︎")])
+        hand = Hand(cards: [fromString("2❤︎"), fromString("A♠︎")])
         XCTAssertTrue(hand.isStraight)
 
         hand = Hand(cards: [fromString("A❤︎"), fromString("3♠︎")])
         XCTAssertFalse(hand.isStraight)
+    }
+
+    func testIsStraightFlush() {
+        var hand: Hand
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("K❤︎")])
+        XCTAssertTrue(hand.isStraightFlush)
+
+        hand = Hand(cards: [fromString("2❤︎"), fromString("A❤︎")])
+        XCTAssertTrue(hand.isStraightFlush)
     }
 
     func fromString(_ str: String) -> Card {
