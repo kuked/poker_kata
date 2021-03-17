@@ -124,6 +124,15 @@ final class PorkerTests: XCTestCase {
         XCTAssertEqual(hand.notation, "high card: J❤︎ K♠︎")
     }
 
+    func testCompareHand() {
+        var hand1: Hand
+        var hand2: Hand
+
+        hand1 = Hand(cards: [fromString("A❤︎"), fromString("K❤︎")])
+        hand2 = Hand(cards: [fromString("A❤︎"), fromString("3❤︎")])
+        XCTAssertTrue(hand1 > hand2)
+    }
+
     func fromString(_ str: String) -> Card {
         let rank = String(str.prefix(str.count - 1))
         let suit = String(str.suffix(1))

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Hand {
+struct Hand: Equatable, Comparable {
     // FIX ME: I don't think Value is a good name.
     enum Value: String {
         case straightFlush = "straight flush"
@@ -48,6 +48,14 @@ struct Hand {
 
     var notation: String {
         return "\(value.rawValue): \(cards[0].notation) \(cards[1].notation)"
+    }
+
+    static func == (lhs: Hand, rhs: Hand) -> Bool {
+        return lhs.value == rhs.value
+    }
+
+    static func < (lhs: Hand, rhs: Hand) -> Bool {
+        return true
     }
 
     private var _isFlush: Bool {
