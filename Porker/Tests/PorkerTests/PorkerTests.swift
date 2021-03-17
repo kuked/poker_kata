@@ -110,6 +110,18 @@ final class PorkerTests: XCTestCase {
 
         hand = Hand(cards: [fromString("A❤︎"), fromString("K❤︎")])
         XCTAssertEqual(hand.notation, "straight flush: A❤︎ K❤︎")
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("3❤︎")])
+        XCTAssertEqual(hand.notation, "flush: A❤︎ 3❤︎")
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("K♠︎")])
+        XCTAssertEqual(hand.notation, "straight: A❤︎ K♠︎")
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("A♠︎")])
+        XCTAssertEqual(hand.notation, "one pair: A❤︎ A♠︎")
+
+        hand = Hand(cards: [fromString("J❤︎"), fromString("K♠︎")])
+        XCTAssertEqual(hand.notation, "high card: J❤︎ K♠︎")
     }
 
     func fromString(_ str: String) -> Card {
