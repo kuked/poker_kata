@@ -65,6 +65,14 @@ struct Hand: Equatable, Comparable {
     }
 
     static func < (lhs: Hand, rhs: Hand) -> Bool {
+        if lhs == rhs {
+            switch lhs.value {
+            case .straightFlush:
+                return compareStraightFlush(lhs: lhs, rhs: rhs)
+            default:
+                return true
+            }
+        }
         return lhs.value.priority > rhs.value.priority
     }
 
@@ -84,5 +92,11 @@ struct Hand: Equatable, Comparable {
         if isHighCard      { return .highCard }
         if isPair          { return .pair }
         return .highCard
+    }
+
+    private static func compareStraightFlush(lhs: Hand, rhs: Hand) -> Bool {
+        let lmax = max(lhs.cards[0], lhs.cards[1])
+        let rmax = max(rhs.cards[0], rhs.cards[1])
+        return lmax < rmax
     }
 }

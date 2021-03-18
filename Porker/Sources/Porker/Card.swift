@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Card: Equatable {
+struct Card: Equatable, Comparable {
     enum Rank: String {
         case ace   = "A"
         case two   = "2"
@@ -64,7 +64,11 @@ struct Card: Equatable {
         return rank == card.rank
     }
     
-    static func ==(lhs: Card, rhs: Card) -> Bool {
+    static func == (lhs: Card, rhs: Card) -> Bool {
         return lhs.hasSameRank(rhs) && lhs.hasSameSuit(rhs)
+    }
+
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank.priority > rhs.rank.priority
     }
 }
