@@ -128,9 +128,13 @@ final class PorkerTests: XCTestCase {
         var hand1: Hand
         var hand2: Hand
 
-        hand1 = Hand(cards: [fromString("A❤︎"), fromString("K❤︎")])
+        hand1 = Hand(cards: [fromString("A❤︎"), fromString("3❤︎")])
+        hand2 = Hand(cards: [fromString("A❤︎"), fromString("K❤︎")])
+        XCTAssertTrue(hand1 < hand2)
+
+        hand1 = Hand(cards: [fromString("A❤︎"), fromString("K♠︎")])
         hand2 = Hand(cards: [fromString("A❤︎"), fromString("3❤︎")])
-        XCTAssertTrue(hand1 > hand2)
+        XCTAssertTrue(hand1 < hand2)
     }
 
     func fromString(_ str: String) -> Card {

@@ -15,6 +15,16 @@ struct Hand: Equatable, Comparable {
         case straight      = "straight"
         case pair          = "one pair"
         case highCard      = "high card"
+
+        var priority: Int {
+            switch self {
+            case .straightFlush: return 1
+            case .flush:         return 2
+            case .straight:      return 3
+            case .pair:          return 4
+            case .highCard:      return 5
+            }
+        }
     }
 
     let cards: [Card]
@@ -55,7 +65,7 @@ struct Hand: Equatable, Comparable {
     }
 
     static func < (lhs: Hand, rhs: Hand) -> Bool {
-        return true
+        return lhs.value.priority > rhs.value.priority
     }
 
     private var _isFlush: Bool {
