@@ -55,7 +55,11 @@ struct Card: Equatable, Comparable {
     var notation: String {
         return rank.rawValue + suit.rawValue
     }
-    
+
+    var priority: Int {
+        return rank.priority
+    }
+
     func hasSameSuit(_ card: Card) -> Bool {
         return suit == card.suit
     }

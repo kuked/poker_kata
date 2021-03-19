@@ -60,12 +60,21 @@ struct Hand: Equatable, Comparable {
         return "\(value.rawValue): \(cards[0].notation) \(cards[1].notation)"
     }
 
+    var priority: Int {
+        return value.priority
+    }
+
     static func == (lhs: Hand, rhs: Hand) -> Bool {
-        return lhs.value == rhs.value
+        let same_hand = lhs.value == rhs.value
+        let lmax = max(lhs.cards[0], lhs.cards[1])
+        let rmax = max(rhs.cards[0], rhs.cards[1])
+        let lmin = min(lhs.cards[0], lhs.cards[1])
+        let rmin = min(rhs.cards[0], rhs.cards[1])
+        return same_hand && lmax == rmax && lmin == rmin
     }
 
     static func < (lhs: Hand, rhs: Hand) -> Bool {
-        if lhs == rhs {
+        if lhs.value == rhs.value {
             switch lhs.value {
             case .straightFlush:
                 return compareStraightFlush(lhs: lhs, rhs: rhs)
@@ -73,7 +82,7 @@ struct Hand: Equatable, Comparable {
                 return true
             }
         }
-        return lhs.value.priority > rhs.value.priority
+        return lhs.priority > rhs.priority
     }
 
     private var _isFlush: Bool {
@@ -95,8 +104,13 @@ struct Hand: Equatable, Comparable {
     }
 
     private static func compareStraightFlush(lhs: Hand, rhs: Hand) -> Bool {
-        let lmax = max(lhs.cards[0], lhs.cards[1])
-        let rmax = max(rhs.cards[0], rhs.cards[1])
-        return lmax < rmax
+        let lmax = max(lhs.cards[0].priority, lhs.cards[1].priority)
+        let rmax = max(rhs.cards[0].priority, rhs.cards[1].priority)
+        if lmax == rmax {
+            let lmin = min(lhs.cards[0].priority, lhs.cards[1].priority)
+            let rmin = min(rhs.cards[0].priority, rhs.cards[1].priority)
+            return lmin > rmin
+        }
+        return lmax > rmax
     }
 }
