@@ -78,49 +78,49 @@ final class PorkerTests: XCTestCase {
     func testIsFlush() {
         var hand: Hand
 
-        hand = Hand(cards: [cardFrom("J❤︎"), cardFrom("K❤︎")])
+        hand = handFrom("flush: J❤︎ K❤︎")
         XCTAssertTrue(hand.isFlush)
         
-        hand = Hand(cards: [cardFrom("J❤︎"), cardFrom("K♠︎")])
+        hand = handFrom("high card: J❤︎ K♠︎")
         XCTAssertFalse(hand.isFlush)
 
-        hand = Hand(cards: [cardFrom("A❤︎"), cardFrom("K❤︎")])
+        hand = handFrom("straight flush: A❤︎ K❤︎")
         XCTAssertFalse(hand.isFlush)
     }
 
     func testIsHighCard() {
         var hand: Hand
 
-        hand = Hand(cards: [cardFrom("J❤︎"), cardFrom("K♠︎")])
+        hand = handFrom("high card: J❤︎ K♠︎")
         XCTAssertTrue(hand.isHighCard)
 
-        hand = Hand(cards: [cardFrom("A❤︎"), cardFrom("A♠︎")])
+        hand = handFrom("one pair: A❤︎ A♠︎")
         XCTAssertFalse(hand.isHighCard)
 
-        hand = Hand(cards: [cardFrom("J❤︎"), cardFrom("K❤︎")])
+        hand = handFrom("flush: J❤︎ K❤︎")
         XCTAssertFalse(hand.isHighCard)
     }
 
     func testIsStraight() {
         var hand: Hand
 
-        hand = Hand(cards: [cardFrom("A❤︎"), cardFrom("K♠︎")])
+        hand = handFrom("straight: A❤︎ K♠︎")
         XCTAssertTrue(hand.isStraight)
 
-        hand = Hand(cards: [cardFrom("2❤︎"), cardFrom("A♠︎")])
+        hand = handFrom("straight: 2❤︎ A♠︎")
         XCTAssertTrue(hand.isStraight)
 
-        hand = Hand(cards: [cardFrom("A❤︎"), cardFrom("3♠︎")])
+        hand = handFrom("high card: A❤︎ 3♠︎")
         XCTAssertFalse(hand.isStraight)
     }
 
     func testIsStraightFlush() {
         var hand: Hand
 
-        hand = Hand(cards: [cardFrom("A❤︎"), cardFrom("K❤︎")])
+        hand = handFrom("straight flush: A❤︎ K❤︎")
         XCTAssertTrue(hand.isStraightFlush)
 
-        hand = Hand(cards: [cardFrom("2❤︎"), cardFrom("A❤︎")])
+        hand = handFrom("straight flush: 2❤︎ A❤︎")
         XCTAssertTrue(hand.isStraightFlush)
     }
 
@@ -128,12 +128,12 @@ final class PorkerTests: XCTestCase {
         var hand1: Hand
         var hand2: Hand
 
-        hand1 = Hand(cards: [cardFrom("A❤︎"), cardFrom("3❤︎")])
-        hand2 = Hand(cards: [cardFrom("A❤︎"), cardFrom("K❤︎")])
+        hand1 = handFrom("flush: A❤︎ 3❤︎")
+        hand2 = handFrom("straight flush: A❤︎ K❤︎")
         XCTAssertTrue(hand1 < hand2)
 
-        hand1 = Hand(cards: [cardFrom("A❤︎"), cardFrom("K♠︎")])
-        hand2 = Hand(cards: [cardFrom("A❤︎"), cardFrom("3❤︎")])
+        hand1 = handFrom("straight: A❤︎ K♠︎")
+        hand2 = handFrom("flush: A❤︎ 3❤︎")
         XCTAssertTrue(hand1 < hand2)
     }
 
@@ -141,16 +141,16 @@ final class PorkerTests: XCTestCase {
         var hand1: Hand
         var hand2: Hand
 
-        hand1 = Hand(cards: [cardFrom("K♠︎"), cardFrom("Q♠︎")])
-        hand2 = Hand(cards: [cardFrom("A❤︎"), cardFrom("K❤︎")])
+        hand1 = handFrom("straight flush: K♠︎ Q♠︎")
+        hand2 = handFrom("straight flush: A❤︎ K❤︎")
         XCTAssertTrue(hand1 < hand2)
 
-        hand1 = Hand(cards: [cardFrom("A♠︎"), cardFrom("2♠︎")])
-        hand2 = Hand(cards: [cardFrom("A❤︎"), cardFrom("K❤︎")])
+        hand1 = handFrom("straight flush: A♠︎ 2♠︎")
+        hand2 = handFrom("straight flush: A❤︎ K❤︎")
         XCTAssertTrue(hand1 < hand2)
 
-        hand1 = Hand(cards: [cardFrom("A♠︎"), cardFrom("2♠︎")])
-        hand2 = Hand(cards: [cardFrom("4❤︎"), cardFrom("3❤︎")])
+        hand1 = handFrom("straight flush: A♠︎ 2♠︎")
+        hand2 = handFrom("straight flush: 4❤︎ 3❤︎")
         XCTAssertTrue(hand1 < hand2)
     }
 
