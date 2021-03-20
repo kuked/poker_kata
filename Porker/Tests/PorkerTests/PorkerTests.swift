@@ -45,17 +45,36 @@ final class PorkerTests: XCTestCase {
         XCTAssertNotEqual(fromString("A♠︎"), fromString("A❤︎"))
         XCTAssertNotEqual(fromString("A♠︎"), fromString("Q❤︎"))
     }
-    
+
+    func testHandNotation() {
+        var hand: Hand
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("K❤︎")])
+        XCTAssertEqual(hand.notation, "straight flush: A❤︎ K❤︎")
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("3❤︎")])
+        XCTAssertEqual(hand.notation, "flush: A❤︎ 3❤︎")
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("K♠︎")])
+        XCTAssertEqual(hand.notation, "straight: A❤︎ K♠︎")
+
+        hand = Hand(cards: [fromString("A❤︎"), fromString("A♠︎")])
+        XCTAssertEqual(hand.notation, "one pair: A❤︎ A♠︎")
+
+        hand = Hand(cards: [fromString("J❤︎"), fromString("K♠︎")])
+        XCTAssertEqual(hand.notation, "high card: J❤︎ K♠︎")
+    }
+
     func testIsPair() {
         var hand: Hand
 
-        hand = Hand(cards: [fromString("A❤︎"), fromString("A♠︎")])
+        hand = handFromString("one pair: A❤︎ A♠︎")
         XCTAssertTrue(hand.isPair)
         
-        hand = Hand(cards: [fromString("J❤︎"), fromString("K♠︎")])
+        hand = handFromString("high card: J❤︎ K♠︎")
         XCTAssertFalse(hand.isPair)
     }
-    
+
     func testIsFlush() {
         var hand: Hand
 
@@ -68,7 +87,7 @@ final class PorkerTests: XCTestCase {
         hand = Hand(cards: [fromString("A❤︎"), fromString("K❤︎")])
         XCTAssertFalse(hand.isFlush)
     }
-    
+
     func testIsHighCard() {
         var hand: Hand
 
@@ -105,25 +124,6 @@ final class PorkerTests: XCTestCase {
         XCTAssertTrue(hand.isStraightFlush)
     }
 
-    func testHandNotation() {
-        var hand: Hand
-
-        hand = Hand(cards: [fromString("A❤︎"), fromString("K❤︎")])
-        XCTAssertEqual(hand.notation, "straight flush: A❤︎ K❤︎")
-
-        hand = Hand(cards: [fromString("A❤︎"), fromString("3❤︎")])
-        XCTAssertEqual(hand.notation, "flush: A❤︎ 3❤︎")
-
-        hand = Hand(cards: [fromString("A❤︎"), fromString("K♠︎")])
-        XCTAssertEqual(hand.notation, "straight: A❤︎ K♠︎")
-
-        hand = Hand(cards: [fromString("A❤︎"), fromString("A♠︎")])
-        XCTAssertEqual(hand.notation, "one pair: A❤︎ A♠︎")
-
-        hand = Hand(cards: [fromString("J❤︎"), fromString("K♠︎")])
-        XCTAssertEqual(hand.notation, "high card: J❤︎ K♠︎")
-    }
-
     func testCompareHand() {
         var hand1: Hand
         var hand2: Hand
@@ -158,5 +158,14 @@ final class PorkerTests: XCTestCase {
         let rank = String(str.prefix(str.count - 1))
         let suit = String(str.suffix(1))
         return Card(rank: Card.Rank.init(rawValue: rank)!, suit: Card.Suit.init(rawValue: suit)!)
+    }
+
+    func handFromString(_ str: String) -> Hand {
+        // hands: card1 card2 ...
+        let result = str.split(separator: ":")
+        let cards = result[1].split(separator: " ").map { fromString(String($0)) }
+        let hand = Hand(cards: cards)
+        assert(hand.notation == str)
+        return hand
     }
 }
