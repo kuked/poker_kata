@@ -167,6 +167,23 @@ final class PorkerTests: XCTestCase {
         XCTAssertTrue(hand1 == hand2)
     }
 
+    func testCompareStraight() {
+        var hand1: Hand
+        var hand2: Hand
+
+        hand1 = handFrom("straight: K❤︎ Q♠︎")
+        hand2 = handFrom("straight: A❤︎ K♠︎")
+        XCTAssertTrue(hand1 < hand2)
+
+        hand1 = handFrom("straight: A❤︎ 2♠︎")
+        hand2 = handFrom("straight: A♣︎ K♦︎")
+        XCTAssertTrue(hand1 < hand2)
+
+        hand1 = handFrom("straight: A❤︎ 2♠︎")
+        hand2 = handFrom("straight: A♣︎ 2♦︎")
+        XCTAssertTrue(hand1 == hand2)
+    }
+
     func cardFrom(_ str: String) -> Card {
         let rank = String(str.prefix(str.count - 1))
         let suit = String(str.suffix(1))
