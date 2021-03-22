@@ -65,12 +65,19 @@ struct Hand: Equatable, Comparable {
     }
 
     static func == (lhs: Hand, rhs: Hand) -> Bool {
-        let same_hand = lhs.value == rhs.value
-        let lmax = max(lhs.cards[0], lhs.cards[1])
-        let rmax = max(rhs.cards[0], rhs.cards[1])
-        let lmin = min(lhs.cards[0], lhs.cards[1])
-        let rmin = min(rhs.cards[0], rhs.cards[1])
-        return same_hand && lmax == rmax && lmin == rmin
+        if lhs.value != rhs.value { return false }
+        switch lhs.value {
+        case .straightFlush:
+            let lmax = max(lhs.cards[0], lhs.cards[1])
+            let rmax = max(rhs.cards[0], rhs.cards[1])
+            let lmin = min(lhs.cards[0], lhs.cards[1])
+            let rmin = min(rhs.cards[0], rhs.cards[1])
+            return lmax == rmax && lmin == rmin
+        case .pair:
+            return lhs.cards[0].priority == rhs.cards[0].priority
+        default:
+            return true
+        }
     }
 
     static func < (lhs: Hand, rhs: Hand) -> Bool {

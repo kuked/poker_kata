@@ -137,7 +137,7 @@ final class PorkerTests: XCTestCase {
         XCTAssertTrue(hand1 < hand2)
     }
 
-    func testCompareSameHand() {
+    func testCompareStraightFlush() {
         var hand1: Hand
         var hand2: Hand
 
@@ -152,6 +152,19 @@ final class PorkerTests: XCTestCase {
         hand1 = handFrom("straight flush: A♠︎ 2♠︎")
         hand2 = handFrom("straight flush: 4❤︎ 3❤︎")
         XCTAssertTrue(hand1 < hand2)
+    }
+
+    func testComparePair() {
+        var hand1: Hand
+        var hand2: Hand
+
+        hand1 = handFrom("one pair: K❤︎ K♠︎")
+        hand2 = handFrom("one pair: A❤︎ A♠︎")
+        XCTAssertTrue(hand1 < hand2)
+
+        hand1 = handFrom("one pair: K❤︎ K♠︎")
+        hand2 = handFrom("one pair: K♣︎ K♦︎")
+        XCTAssertTrue(hand1 == hand2)
     }
 
     func cardFrom(_ str: String) -> Card {
