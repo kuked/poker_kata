@@ -79,8 +79,8 @@ struct Hand: Equatable, Comparable {
         case .straightFlush:
             return lhs.highestCard == rhs.highestCard
         case .flush:
-            let lmax = Swift.max(lhs.cards[0].priority, lhs.cards[1].priority)
-            let rmax = Swift.max(rhs.cards[0].priority, rhs.cards[1].priority)
+            let lmax = max(lhs.cards[0].priority, lhs.cards[1].priority)
+            let rmax = max(rhs.cards[0].priority, rhs.cards[1].priority)
             let lmin = min(lhs.cards[0].priority, lhs.cards[1].priority)
             let rmin = min(rhs.cards[0].priority, rhs.cards[1].priority)
             return lmax == rmax && lmin == rmin
@@ -91,8 +91,8 @@ struct Hand: Equatable, Comparable {
         case .highCard:
             let lmax = min(lhs.cards[0].priority, lhs.cards[1].priority)
             let rmax = min(rhs.cards[0].priority, rhs.cards[1].priority)
-            let lmin = Swift.max(lhs.cards[0].priority, lhs.cards[1].priority)
-            let rmin = Swift.max(rhs.cards[0].priority, rhs.cards[1].priority)
+            let lmin = max(lhs.cards[0].priority, lhs.cards[1].priority)
+            let rmin = max(rhs.cards[0].priority, rhs.cards[1].priority)
             return lmax == rmax && lmin == rmin
         }
     }
@@ -133,15 +133,6 @@ struct Hand: Equatable, Comparable {
         return .highCard
     }
 
-    private static func max(hand: Hand) -> Card {
-        if hand.value == .straightFlush || hand.value == .straight {
-            if hand.cards.contains(where: { $0.rank == .two}) {
-                return hand.cards.first(where: { $0.rank == .two })!
-            }
-        }
-        return hand.cards.max { a, b in a.priority >= b.priority }!
-    }
-
     private static func compareStraightFlush(lhs: Hand, rhs: Hand) -> Bool {
         return lhs.highestCard < rhs.highestCard
     }
@@ -150,8 +141,8 @@ struct Hand: Equatable, Comparable {
         let lmax = min(lhs.cards[0].priority, lhs.cards[1].priority)
         let rmax = min(rhs.cards[0].priority, rhs.cards[1].priority)
         if lmax == rmax {
-            let lmin = Swift.max(lhs.cards[0].priority, lhs.cards[1].priority)
-            let rmin = Swift.max(rhs.cards[0].priority, rhs.cards[1].priority)
+            let lmin = max(lhs.cards[0].priority, lhs.cards[1].priority)
+            let rmin = max(rhs.cards[0].priority, rhs.cards[1].priority)
             return lmin > rmin
         }
         return lmax > rmax
@@ -165,8 +156,8 @@ struct Hand: Equatable, Comparable {
         let lmax = min(lhs.cards[0].priority, lhs.cards[1].priority)
         let rmax = min(rhs.cards[0].priority, rhs.cards[1].priority)
         if lmax == rmax {
-            let lmin = Swift.max(lhs.cards[0].priority, lhs.cards[1].priority)
-            let rmin = Swift.max(rhs.cards[0].priority, rhs.cards[1].priority)
+            let lmin = max(lhs.cards[0].priority, lhs.cards[1].priority)
+            let rmin = max(rhs.cards[0].priority, rhs.cards[1].priority)
             return lmin > rmin
         }
         return lmax > rmax
