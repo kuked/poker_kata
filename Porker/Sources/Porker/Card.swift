@@ -69,7 +69,7 @@ struct Card: Equatable, Comparable {
     }
     
     static func == (lhs: Card, rhs: Card) -> Bool {
-        return lhs.hasSameRank(rhs) && lhs.hasSameSuit(rhs)
+        return lhs.hasSameRank(rhs)
     }
 
     static func < (lhs: Card, rhs: Card) -> Bool {

@@ -39,10 +39,9 @@ final class PorkerTests: XCTestCase {
     }
 
     func testCardEqual() {
-        XCTAssertEqual(cardFrom("A♠︎"), cardFrom("A♠︎"))
+        XCTAssertEqual(cardFrom("A❤︎"), cardFrom("A♠︎"))
 
         XCTAssertNotEqual(cardFrom("A♠︎"), cardFrom("2♠︎"))
-        XCTAssertNotEqual(cardFrom("A♠︎"), cardFrom("A❤︎"))
         XCTAssertNotEqual(cardFrom("A♠︎"), cardFrom("Q❤︎"))
     }
 
