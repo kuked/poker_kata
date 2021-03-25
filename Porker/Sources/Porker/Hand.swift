@@ -64,52 +64,40 @@ struct Hand: Equatable, Comparable {
         return value.priority
     }
 
-    var highestCard: Card {
+    var highest: Card {
         if value == .straightFlush || value == .straight {
             if cards.contains(where: { $0.rank == .two}) {
                 return cards.first(where: { $0.rank == .two })!
             }
         }
-        return cards.max { a, b in a.priority >= b.priority }!
+        return cards.max { a, b in a < b }!
+    }
+
+    var lowest: Card {
+        return cards.min { a, b in a < b }!
     }
 
     static func == (lhs: Hand, rhs: Hand) -> Bool {
         if lhs.value != rhs.value { return false }
         switch lhs.value {
-        case .straightFlush:
-            return lhs.highestCard == rhs.highestCard
-        case .flush:
-            let lmax = max(lhs.cards[0].priority, lhs.cards[1].priority)
-            let rmax = max(rhs.cards[0].priority, rhs.cards[1].priority)
-            let lmin = min(lhs.cards[0].priority, lhs.cards[1].priority)
-            let rmin = min(rhs.cards[0].priority, rhs.cards[1].priority)
-            return lmax == rmax && lmin == rmin
-        case .straight:
-            return lhs.highestCard == rhs.highestCard
+        case .straightFlush, .straight:
+            return lhs.highest == rhs.highest
+        case .flush, .highCard:
+            return lhs.highest == rhs.highest && lhs.lowest == rhs.lowest
         case .pair:
             return lhs.cards[0].priority == rhs.cards[0].priority
-        case .highCard:
-            let lmax = min(lhs.cards[0].priority, lhs.cards[1].priority)
-            let rmax = min(rhs.cards[0].priority, rhs.cards[1].priority)
-            let lmin = max(lhs.cards[0].priority, lhs.cards[1].priority)
-            let rmin = max(rhs.cards[0].priority, rhs.cards[1].priority)
-            return lmax == rmax && lmin == rmin
         }
     }
 
     static func < (lhs: Hand, rhs: Hand) -> Bool {
         if lhs.value == rhs.value {
             switch lhs.value {
-            case .straightFlush:
-                return compareStraightFlush(lhs: lhs, rhs: rhs)
-            case .flush:
-                return compareFlush(lhs: lhs, rhs: rhs)
-            case .straight:
-                return compareStraight(lhs: lhs, rhs: rhs)
+            case .straightFlush, .straight:
+                return compareHighest(lhs: lhs, rhs: rhs)
+            case .flush, .highCard:
+                return compareAll(lhs: lhs, rhs: rhs)
             case .pair:
                 return lhs.cards[0].priority > rhs.cards[0].priority
-            case .highCard:
-                return compareHighCard(lhs: lhs, rhs: rhs)
             }
         }
         return lhs.priority > rhs.priority
@@ -133,33 +121,18 @@ struct Hand: Equatable, Comparable {
         return .highCard
     }
 
-    private static func compareStraightFlush(lhs: Hand, rhs: Hand) -> Bool {
-        return lhs.highestCard < rhs.highestCard
+    private static func compareHighest(lhs: Hand, rhs: Hand) -> Bool {
+        return lhs.highest < rhs.highest
     }
 
-    private static func compareFlush(lhs: Hand, rhs: Hand) -> Bool {
-        let lmax = min(lhs.cards[0].priority, lhs.cards[1].priority)
-        let rmax = min(rhs.cards[0].priority, rhs.cards[1].priority)
+    private static func compareAll(lhs: Hand, rhs: Hand) -> Bool {
+        let lmax = lhs.highest
+        let rmax = rhs.highest
         if lmax == rmax {
-            let lmin = max(lhs.cards[0].priority, lhs.cards[1].priority)
-            let rmin = max(rhs.cards[0].priority, rhs.cards[1].priority)
-            return lmin > rmin
+            let lmin = lhs.lowest
+            let rmin = rhs.lowest
+            return lmin < rmin
         }
-        return lmax > rmax
-    }
-
-    private static func compareStraight(lhs: Hand, rhs: Hand) -> Bool {
-        return lhs.highestCard < rhs.highestCard
-    }
-
-    private static func compareHighCard(lhs: Hand, rhs: Hand) -> Bool {
-        let lmax = min(lhs.cards[0].priority, lhs.cards[1].priority)
-        let rmax = min(rhs.cards[0].priority, rhs.cards[1].priority)
-        if lmax == rmax {
-            let lmin = max(lhs.cards[0].priority, lhs.cards[1].priority)
-            let rmin = max(rhs.cards[0].priority, rhs.cards[1].priority)
-            return lmin > rmin
-        }
-        return lmax > rmax
+        return lmax < rmax
     }
 }
