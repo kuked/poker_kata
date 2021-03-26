@@ -107,7 +107,7 @@ struct Hand: Equatable, Comparable {
 
     private var _isFlush: Bool {
         let first = cards[0]
-        return cards.allSatisfy( { $0.suit == first.suit })
+        return cards.allSatisfy({ $0.suit == first.suit })
     }
 
     private var _isStraight: Bool {
