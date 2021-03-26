@@ -67,10 +67,13 @@ final class PorkerTests: XCTestCase {
     func testIsPair() {
         var hand: Hand
 
-        hand = handFrom("one pair: A❤︎ A♠︎")
+        hand = handFrom("one pair: A❤︎ A♠︎ K♣︎")
         XCTAssertTrue(hand.isPair)
-        
-        hand = handFrom("high card: J❤︎ K♠︎")
+
+        hand = handFrom("one pair: J♣︎ A♠︎ J❤︎")
+        XCTAssertTrue(hand.isPair)
+
+        hand = handFrom("high card: J❤︎ K♠︎ A❤︎")
         XCTAssertFalse(hand.isPair)
     }
 

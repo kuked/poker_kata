@@ -37,7 +37,8 @@ struct Hand: Equatable, Comparable {
     }
 
     var isPair: Bool {
-        return cards[0].hasSameRank(cards[1])
+        let group = Dictionary(grouping: cards, by: { $0.rank })
+        return group.values.map { $0.count }.max() == 2
     }
     
     var isFlush: Bool {
@@ -57,7 +58,8 @@ struct Hand: Equatable, Comparable {
     }
 
     var notation: String {
-        return "\(value.rawValue): \(cards[0].notation) \(cards[1].notation)"
+        let notations = cards.map { $0.notation }.joined(separator: " ")
+        return "\(value.rawValue): \(notations)"
     }
 
     var priority: Int {
