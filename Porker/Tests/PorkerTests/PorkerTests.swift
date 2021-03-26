@@ -80,13 +80,13 @@ final class PorkerTests: XCTestCase {
     func testIsFlush() {
         var hand: Hand
 
-        hand = handFrom("flush: J❤︎ K❤︎")
+        hand = handFrom("flush: J❤︎ K❤︎ A❤︎")
         XCTAssertTrue(hand.isFlush)
         
-        hand = handFrom("high card: J❤︎ K♠︎")
+        hand = handFrom("high card: J❤︎ K❤︎ A♠︎")
         XCTAssertFalse(hand.isFlush)
 
-        hand = handFrom("straight flush: A❤︎ K❤︎")
+        hand = handFrom("straight flush: A❤︎ K❤︎ Q❤︎")
         XCTAssertFalse(hand.isFlush)
     }
 
