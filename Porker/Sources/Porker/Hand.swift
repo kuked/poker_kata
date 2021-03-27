@@ -13,6 +13,7 @@ struct Hand: Equatable, Comparable {
         case straightFlush = "straight flush"
         case flush         = "flush"
         case straight      = "straight"
+        case threeCard     = "three of a kind"
         case pair          = "one pair"
         case highCard      = "high card"
 
@@ -21,8 +22,9 @@ struct Hand: Equatable, Comparable {
             case .straightFlush: return 1
             case .flush:         return 2
             case .straight:      return 3
-            case .pair:          return 4
-            case .highCard:      return 5
+            case .threeCard:     return 4
+            case .pair:          return 5
+            case .highCard:      return 6
             }
         }
     }
@@ -57,6 +59,11 @@ struct Hand: Equatable, Comparable {
         return _isStraight && _isFlush
     }
 
+    var isThreeCard: Bool {
+        let group = Dictionary(grouping: cards, by: { $0.rank })
+        return group.values.map { $0.count }.max() == 3
+    }
+
     var notation: String {
         let notations = cards.map { $0.notation }.joined(separator: " ")
         return "\(value.rawValue): \(notations)"
@@ -86,7 +93,7 @@ struct Hand: Equatable, Comparable {
             return lhs.highest == rhs.highest
         case .flush, .highCard:
             return lhs.highest == rhs.highest && lhs.lowest == rhs.lowest
-        case .pair:
+        case .threeCard, .pair:
             return lhs.cards[0].priority == rhs.cards[0].priority
         }
     }
@@ -98,7 +105,7 @@ struct Hand: Equatable, Comparable {
                 return compareHighest(lhs: lhs, rhs: rhs)
             case .flush, .highCard:
                 return compareAll(lhs: lhs, rhs: rhs)
-            case .pair:
+            case .threeCard, .pair:
                 return lhs.cards[0].priority > rhs.cards[0].priority
             }
         }
@@ -123,6 +130,7 @@ struct Hand: Equatable, Comparable {
         if isStraightFlush { return .straightFlush }
         if isFlush         { return .flush }
         if isStraight      { return .straight }
+        if isThreeCard     { return .threeCard }
         if isHighCard      { return .highCard }
         if isPair          { return .pair }
         return .highCard

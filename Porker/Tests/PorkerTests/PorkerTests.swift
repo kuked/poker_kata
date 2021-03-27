@@ -57,6 +57,9 @@ final class PorkerTests: XCTestCase {
         hand = Hand(cards: [cardFrom("A❤︎"), cardFrom("K♠︎")])
         XCTAssertEqual(hand.notation, "straight: A❤︎ K♠︎")
 
+        hand = Hand(cards: [cardFrom("A❤︎"), cardFrom("A♠︎"), cardFrom("A♣︎")])
+        XCTAssertEqual(hand.notation, "three of a kind: A❤︎ A♠︎ A♣︎")
+
         hand = Hand(cards: [cardFrom("A❤︎"), cardFrom("A♠︎")])
         XCTAssertEqual(hand.notation, "one pair: A❤︎ A♠︎")
 
@@ -127,6 +130,28 @@ final class PorkerTests: XCTestCase {
 
         hand = handFrom("flush: 2❤︎ A❤︎ K❤︎")
         XCTAssertFalse(hand.isStraightFlush)
+    }
+
+    func testIsThreeCard() {
+        var hand: Hand
+
+        hand = handFrom("three of a kind: A❤︎ A♠︎ A♣︎")
+        XCTAssertTrue(hand.isThreeCard)
+
+        hand = handFrom("high card: 2❤︎ A❤︎ K♠︎")
+        XCTAssertFalse(hand.isThreeCard)
+
+        hand = handFrom("one pair: A❤︎ A♠︎ K♣︎")
+        XCTAssertFalse(hand.isThreeCard)
+
+        hand = handFrom("straight: Q❤︎ A❤︎ K♠︎")
+        XCTAssertFalse(hand.isThreeCard)
+
+        hand = handFrom("flush: J❤︎ K❤︎ A❤︎")
+        XCTAssertFalse(hand.isThreeCard)
+
+        hand = handFrom("straight flush: A❤︎ K❤︎ Q❤︎")
+        XCTAssertFalse(hand.isThreeCard)
     }
 
     func testCompareHand() {
