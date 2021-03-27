@@ -111,8 +111,12 @@ struct Hand: Equatable, Comparable {
     }
 
     private var _isStraight: Bool {
-        let difference = abs(cards[0].rank.priority - cards[1].rank.priority)
-        return difference == 1 || difference == 12
+        var actual = cards.map { $0.priority }.sorted()
+        if actual.first == 1 && actual.last == 13 {
+            actual.removeFirst()
+        }
+        let expected = Array(actual[0]..<actual[0] + actual.count)
+        return zip(actual, expected).allSatisfy({ $0.0 == $0.1 })
     }
 
     private func decide() -> Value {

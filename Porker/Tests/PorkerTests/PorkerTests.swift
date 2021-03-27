@@ -93,37 +93,40 @@ final class PorkerTests: XCTestCase {
     func testIsHighCard() {
         var hand: Hand
 
-        hand = handFrom("high card: J❤︎ K♠︎")
+        hand = handFrom("high card: J❤︎ K♠︎ A❤︎")
         XCTAssertTrue(hand.isHighCard)
 
-        hand = handFrom("one pair: A❤︎ A♠︎")
+        hand = handFrom("one pair: A❤︎ A♠︎ K❤︎")
         XCTAssertFalse(hand.isHighCard)
 
-        hand = handFrom("flush: J❤︎ K❤︎")
+        hand = handFrom("flush: J❤︎ K❤︎ A❤︎")
         XCTAssertFalse(hand.isHighCard)
     }
 
     func testIsStraight() {
         var hand: Hand
 
-        hand = handFrom("straight: A❤︎ K♠︎")
+        hand = handFrom("straight: Q❤︎ A❤︎ K♠︎")
         XCTAssertTrue(hand.isStraight)
 
-        hand = handFrom("straight: 2❤︎ A♠︎")
+        hand = handFrom("straight: A♠︎ 3❤︎ 2❤︎")
         XCTAssertTrue(hand.isStraight)
 
-        hand = handFrom("high card: A❤︎ 3♠︎")
+        hand = handFrom("high card: 2❤︎ A❤︎ K♠︎")
         XCTAssertFalse(hand.isStraight)
     }
 
     func testIsStraightFlush() {
         var hand: Hand
 
-        hand = handFrom("straight flush: A❤︎ K❤︎")
+        hand = handFrom("straight flush: A❤︎ K❤︎ Q❤︎")
         XCTAssertTrue(hand.isStraightFlush)
 
-        hand = handFrom("straight flush: 2❤︎ A❤︎")
+        hand = handFrom("straight flush: 2❤︎ A❤︎ 3❤︎")
         XCTAssertTrue(hand.isStraightFlush)
+
+        hand = handFrom("flush: 2❤︎ A❤︎ K❤︎")
+        XCTAssertFalse(hand.isStraightFlush)
     }
 
     func testCompareHand() {
