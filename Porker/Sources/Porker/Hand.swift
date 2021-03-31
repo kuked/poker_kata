@@ -93,8 +93,14 @@ struct Hand: Equatable, Comparable {
             return lhs.highest == rhs.highest
         case .flush, .highCard:
             return lhs.highest == rhs.highest && lhs.lowest == rhs.lowest
-        case .threeCard, .pair:
+        case .threeCard:
             return lhs.cards[0].priority == rhs.cards[0].priority
+        case .pair:
+            let lhit = lhs.hit(value: .pair)!
+            let rhit = rhs.hit(value: .pair)!
+            let lmiss = lhs.miss(value: .pair)!
+            let rmiss = lhs.miss(value: .pair)!
+            return lhit[0].priority == rhit[0].priority && lmiss[0].priority == rmiss[0].priority
         }
     }
 
@@ -105,8 +111,20 @@ struct Hand: Equatable, Comparable {
                 return compareHighest(lhs: lhs, rhs: rhs)
             case .flush, .highCard:
                 return compareAll(lhs: lhs, rhs: rhs)
-            case .threeCard, .pair:
+            case .threeCard:
                 return lhs.cards[0].priority > rhs.cards[0].priority
+            case .pair:
+                let lhit = lhs.hit(value: .pair)!
+                let rhit = rhs.hit(value: .pair)!
+                let lmiss = lhs.miss(value: .pair)!
+                let rmiss = rhs.miss(value: .pair)!
+                if lhit[0].priority > rhit[0].priority {
+                    return true
+                } else if lhit[0].priority == rhit[0].priority {
+                    return lmiss[0].priority > rmiss[0].priority
+                } else {
+                    return false
+                }
             }
         }
         return lhs.priority > rhs.priority
@@ -134,6 +152,30 @@ struct Hand: Equatable, Comparable {
         if isHighCard      { return .highCard }
         if isPair          { return .pair }
         return .highCard
+    }
+
+    private func hit(value: Value) -> [Card]? {
+        switch value {
+        case .straightFlush, .straight, .flush, .threeCard:
+            return cards
+        case .pair:
+            let group = Dictionary(grouping: cards, by: { $0.rank })
+            return group.values.first { $0.count == 2 }!
+        default:
+            return nil
+        }
+    }
+
+    private func miss(value: Value) -> [Card]? {
+        switch value {
+        case .straightFlush, .straight, .flush, .threeCard:
+            return nil
+        case .pair:
+            let group = Dictionary(grouping: cards, by: { $0.rank })
+            return group.values.first { $0.count == 1 }!
+        default:
+            return cards
+        }
     }
 
     private static func compareHighest(lhs: Hand, rhs: Hand) -> Bool {

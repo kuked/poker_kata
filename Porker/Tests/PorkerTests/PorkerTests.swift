@@ -188,12 +188,16 @@ final class PorkerTests: XCTestCase {
         var hand1: Hand
         var hand2: Hand
 
-        hand1 = handFrom("one pair: K❤︎ K♠︎")
-        hand2 = handFrom("one pair: A❤︎ A♠︎")
+        hand1 = handFrom("one pair: K❤︎ K♠︎ A♣︎")
+        hand2 = handFrom("one pair: A❤︎ A♠︎ K♣︎")
         XCTAssertTrue(hand1 < hand2)
 
-        hand1 = handFrom("one pair: K❤︎ K♠︎")
-        hand2 = handFrom("one pair: K♣︎ K♦︎")
+        hand1 = handFrom("one pair: A♦︎ A♣︎ Q♣︎")
+        hand2 = handFrom("one pair: A❤︎ A♠︎ K♣︎")
+        XCTAssertTrue(hand1 < hand2)
+
+        hand1 = handFrom("one pair: K❤︎ K♠︎ A❤︎")
+        hand2 = handFrom("one pair: K♣︎ K♦︎ A♣︎")
         XCTAssertTrue(hand1 == hand2)
     }
 
